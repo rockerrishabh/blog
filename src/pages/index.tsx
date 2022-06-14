@@ -16,6 +16,7 @@ const Home: NextPage = () => {
         {session ? (
           <div>
             <h1>{session.user.name}</h1>
+            <h3>{session.user.email}</h3>
             <h2>{session.user.role}</h2>
             <Image
               className="rounded-full"
