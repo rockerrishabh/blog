@@ -1,7 +1,7 @@
 import React from 'react'
 
 function ErrorPage() {
-  return <div>ErrorPage</div>
+  return <div>ErrorPage Auth Error</div>
 }
 
 export default ErrorPage
