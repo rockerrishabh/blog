@@ -34,14 +34,13 @@ const Home: NextPage<PostsProps> = ({ posts }) => {
             >
               Sign Out
             </button>
-            <p>fjjjjjjjjjjjjjjjjvyryyyyyyyyyyyyyyyyyyyyyyyyyyy</p>
           </div>
         ) : (
           <div className="p-5">
             {posts.map((posts) => (
-              <div key={posts.id}>
+              <div key={posts.slug}>
                 <Posts
-                  href={`/posts/${posts.id}`}
+                  href={`/posts/${posts.slug}`}
                   title={posts.title}
                   content={posts.content}
                   createdAt={posts.createdAt}
