@@ -6,61 +6,34 @@ import Posts from '../components/Posts'
 import { prisma } from '../../lib/prisma'
 import { PostsProps } from '../../typings'
 import { useRouter } from 'next/router'
+import ReactMarkdown from 'react-markdown'
 import Link from 'next/link'
+import ReactTimeago from 'react-timeago'
 
 const Home: NextPage<PostsProps> = ({ posts }) => {
   const router = useRouter()
   const { data: session } = useSession()
+
   return (
-    <Layout title="Blog App">
-      <div>
-        {session ? (
-          <div>
-            <h1>{session.user.name}</h1>
-            <h3>{session.user.email}</h3>
-            <h2>{session.user.role}</h2>
-            <h1>{session.user.id}</h1>
-            <Image
-              className="rounded-full"
-              src={session.user.image as string}
-              alt={session.user.name}
-              height="40px"
-              width="40px"
-            />
-            <button
-              onClick={() => {
-                signOut()
-              }}
-            >
-              Sign Out
-            </button>
-          </div>
-        ) : (
-          <div className="p-5">
-            {posts.map((posts) => (
-              <div key={posts.slug}>
-                <Posts
-                  href={`/posts/${posts.slug}`}
-                  title={posts.title}
-                  content={posts.content}
-                  createdAt={posts.createdAt}
-                  updatedAt={posts.updatedAt}
-                  published={posts.published}
-                  authorEmail={posts.author.email}
-                  authorName={posts.author.name}
-                />
+    <Layout className="max-w-7xl mx-auto" title="Blog App">
+      <h1 className="mb-6 ml-4 mt-4">Recent Posts</h1>
+      <div className="px-6">
+        {posts.map((post) => (
+          <Link key={post.slug} href={`/posts/${post.slug}`}>
+            <div className="shadow-lg flex flex-col space-y-2 hover:border-red-400 cursor-pointer border group border-red-100 rounded-md p-5">
+              <h2 className="group-hover:underline underline-offset-2 underline decoration-slate-700 group-hover:decoration-red-400">
+                {post.title}
+              </h2>
+              <ReactMarkdown className="">{post.content}</ReactMarkdown>
+              <div className="flex font-semibold pt-2 items-center justify-between">
+                <small className="">By {post.author.name}</small>
+                <small>
+                  <ReactTimeago date={post.updatedAt} />
+                </small>
               </div>
-            ))}
-            <button
-              onClick={() => {
-                signIn('google')
-              }}
-            >
-              Sign In
-            </button>
-          </div>
-        )}
-        <h1></h1>
+            </div>
+          </Link>
+        ))}
       </div>
     </Layout>
   )
@@ -68,7 +41,8 @@ const Home: NextPage<PostsProps> = ({ posts }) => {
 
 export default Home
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession({ ctx })
   const posts = await prisma.posts.findMany({
     where: {
       published: true,
@@ -82,5 +56,5 @@ export const getServerSideProps: GetServerSideProps = async () => {
       updatedAt: 'desc',
     },
   })
-  return JSON.parse(JSON.stringify({ props: { posts } }))
+  return JSON.parse(JSON.stringify({ props: { session, posts } }))
 }
