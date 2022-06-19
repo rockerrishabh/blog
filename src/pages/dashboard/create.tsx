@@ -18,9 +18,9 @@ function Create() {
   } = useForm<FormData>()
   const onSubmit = handleSubmit(({ title, slug, content }) =>
     toast.promise(Create({ title, slug, content }), {
-      loading: 'Updating...',
-      success: <b>Updated Successfully!</b>,
-      error: <b>Error while Updating</b>,
+      loading: 'Creating...',
+      success: <b>Created Successfully!</b>,
+      error: <b>Error while Creating</b>,
     })
   )
   const Create = async ({ title, slug, content }: FormData): Promise<void> => {
@@ -88,7 +88,7 @@ function Create() {
             type="submit"
             className="bg-blue-500 py-2 rounded text-white hover:opacity-95"
           >
-            Update
+            Create
           </button>
         </form>
       </div>
