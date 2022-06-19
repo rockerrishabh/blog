@@ -1,23 +1,24 @@
-import type { GetServerSideProps, NextPage } from 'next'
-import { getSession, signIn, signOut, useSession } from 'next-auth/react'
-import Image from 'next/image'
-import Layout from '../components/Layout'
-import Posts from '../components/Posts'
-import { prisma } from '../../lib/prisma'
-import { PostsProps } from '../../typings'
-import { useRouter } from 'next/router'
-import ReactMarkdown from 'react-markdown'
+import { GetServerSideProps } from 'next'
+import { getSession } from 'next-auth/react'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
 import ReactTimeago from 'react-timeago'
+import { prisma } from '../../../lib/prisma'
+import { PostsProps } from '../../../typings'
+import Layout from '../../components/Layout'
 
-const Home: NextPage<PostsProps> = ({ posts }) => {
-  const router = useRouter()
-  const { data: session } = useSession()
-
+function MyPosts({ posts }: PostsProps) {
   return (
-    <Layout className="max-w-7xl mx-auto" title="Blog App">
-      <h1 className="mb-6 ml-4 mt-4">Recent Posts</h1>
-      <div className="mt-4 mb-4 flex flex-col space-y-4">
+    <Layout title="My Posts" className="max-w-7xl mx-auto">
+      <div className="flex mt-4 items-center justify-between">
+        <div>My Posts</div>
+        <Link href="/dashboard/create">
+          <a className="px-4 py-2 bg-green-500 hover:bg-green-400 rounded-md text-white">
+            Create
+          </a>
+        </Link>
+      </div>
+      <div className="mt-4 flex flex-col mb-4 space-y-4">
         {posts.map((post) => (
           <Link key={post.slug} href={`/posts/${post.slug}`}>
             <div className="shadow-lg flex flex-col space-y-2 hover:border-red-400 cursor-pointer border group border-red-100 rounded-md p-5">
@@ -41,13 +42,19 @@ const Home: NextPage<PostsProps> = ({ posts }) => {
   )
 }
 
-export default Home
+export default MyPosts
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context)
+  if (!session) {
+    context.res.writeHead(302, { Location: '/' })
+    context.res.end()
+  }
   const posts = await prisma.posts.findMany({
     where: {
-      published: true,
+      author: {
+        email: session?.user.email,
+      },
     },
     include: {
       author: {

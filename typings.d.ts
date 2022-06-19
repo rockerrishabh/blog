@@ -27,3 +27,9 @@ export type PostProps = {
   createdAt: Date
   updatedAt: Date
 }
+
+export type FormData = {
+  title: string
+  slug: string
+  content: string
+}
