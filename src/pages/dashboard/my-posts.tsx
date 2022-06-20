@@ -1,6 +1,8 @@
 import { GetServerSideProps } from 'next'
-import { getSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import ReactTimeago from 'react-timeago'
 import { prisma } from '../../../lib/prisma'
@@ -8,6 +10,11 @@ import { PostsProps } from '../../../typings'
 import Layout from '../../components/Layout'
 
 function MyPosts({ posts }: PostsProps) {
+  const { data: session } = useSession()
+  const router = useRouter()
+  useEffect(() => {
+    router.reload()
+  }, [router])
   return (
     <Layout title="My Posts" className="max-w-7xl mx-auto">
       <div className="flex mt-4 items-center justify-between">

@@ -17,6 +17,9 @@ function Edit(post: PostProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>()
+  useEffect(() => {
+    router.reload()
+  }, [router])
   const onSubmit = handleSubmit(({ title, slug, content }) =>
     toast.promise(Update({ title, slug, content }), {
       loading: 'Updating...',

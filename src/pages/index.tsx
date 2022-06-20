@@ -9,10 +9,15 @@ import { useRouter } from 'next/router'
 import ReactMarkdown from 'react-markdown'
 import Link from 'next/link'
 import ReactTimeago from 'react-timeago'
+import { useEffect } from 'react'
 
 const Home: NextPage<PostsProps> = ({ posts }) => {
   const router = useRouter()
   const { data: session } = useSession()
+
+  useEffect(() => {
+    router.reload()
+  }, [router])
 
   return (
     <Layout className="max-w-7xl mx-auto" title="Blog App">
