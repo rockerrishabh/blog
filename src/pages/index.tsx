@@ -14,11 +14,7 @@ import { useEffect } from 'react'
 const Home: NextPage<PostsProps> = ({ posts }) => {
   const router = useRouter()
   const { data: session } = useSession()
-
-  useEffect(() => {
-    router.reload()
-  }, [router])
-
+  useEffect(() => void router.prefetch('/'), [router])
   return (
     <Layout className="max-w-7xl mx-auto" title="Blog App">
       <h1 className="mb-6 ml-4 mt-4">Recent Posts</h1>

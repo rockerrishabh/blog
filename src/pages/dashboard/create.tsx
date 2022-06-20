@@ -24,13 +24,17 @@ function Create() {
     })
   )
   const Create = async ({ title, slug, content }: FormData): Promise<void> => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, slug, content }),
-    })
-    reset()
-    router.push(`${process.env.NEXT_PUBLIC_APP_URL}`)
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, slug, content }),
+      })
+      reset()
+      router.push('/dashboard/my-posts')
+    } catch (error) {
+      toast.error('Error Happened')
+    }
   }
   return (
     <Layout title="Create new Post" className="max-w-7xl mx-auto">

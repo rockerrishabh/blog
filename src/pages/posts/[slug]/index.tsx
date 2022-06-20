@@ -14,9 +14,6 @@ import toast from 'react-hot-toast'
 function Post(post: PostProps) {
   const { data: session } = useSession()
   const router = useRouter()
-  useEffect(() => {
-    router.reload()
-  }, [router])
 
   const publishPost = async (id: string): Promise<void> => {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/publish/${id}`, {

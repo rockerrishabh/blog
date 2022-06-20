@@ -12,9 +12,7 @@ import Layout from '../../components/Layout'
 function MyPosts({ posts }: PostsProps) {
   const { data: session } = useSession()
   const router = useRouter()
-  useEffect(() => {
-    router.reload()
-  }, [router])
+  useEffect(() => void router.prefetch('/dashboard/posts'), [router])
   return (
     <Layout title="My Posts" className="max-w-7xl mx-auto">
       <div className="flex mt-4 items-center justify-between">

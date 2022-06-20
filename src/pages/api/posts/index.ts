@@ -9,23 +9,28 @@ export default async function handle(
   const { title, content, slug } = req.body
 
   const session = await getSession({ req })
-  if (session) {
-    const posts = await prisma.posts.create({
-      data: {
-        title: title,
-        content: content,
-        slug: slug,
-        author: {
-          connect: {
-            email: session?.user.email,
+  try {
+    if (session) {
+      const posts = await prisma.posts.create({
+        data: {
+          title: title,
+          content: content,
+          slug: slug,
+          author: {
+            connect: {
+              email: session?.user.email,
+            },
           },
         },
-      },
-    })
-    res.json(posts)
-  } else {
-    res.send({
-      error: 'You must be sign in to view the protected content on this page.',
-    })
+      })
+      res.json(posts)
+    } else {
+      res.send({
+        error:
+          'You must be sign in to view the protected content on this page.',
+      })
+    }
+  } catch (error) {
+    console.log(error)
   }
 }
