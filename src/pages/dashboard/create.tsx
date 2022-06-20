@@ -16,19 +16,19 @@ function Create() {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>()
-  const onSubmit = handleSubmit(({ title, slug, content }) =>
-    toast.promise(Create({ title, slug, content }), {
+  const onSubmit = handleSubmit((data) =>
+    toast.promise(Create(data), {
       loading: 'Creating...',
       success: <b>Created Successfully!</b>,
       error: <b>Error while Creating</b>,
     })
   )
-  const Create = async ({ title, slug, content }: FormData): Promise<void> => {
+  const Create = async (data: FormData): Promise<void> => {
     try {
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, slug, content }),
+        body: JSON.stringify(data),
       })
       reset()
       router.push('/dashboard/my-posts')
