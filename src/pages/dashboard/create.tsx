@@ -6,6 +6,11 @@ import { FormData } from '../../../typings'
 import { Controller, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
+import dynamic from 'next/dynamic'
+
+const SunEditor = dynamic(() => import('suneditor-react'), {
+  ssr: false,
+})
 
 function Create() {
   const { data: Session } = useSession()
@@ -78,11 +83,44 @@ function Create() {
             <Controller
               control={control}
               render={({ field: { onChange, onBlur } }) => (
-                <textarea
-                  className="flex-1 px-1 py-1 bg-transparent outline-none border border-gray-600 rounded focus:ring-2 focus:border-0 focus:ring-blue-500"
+                <SunEditor
+                  // className="flex-1 px-1 py-1 bg-transparent outline-none border border-gray-600 rounded focus:ring-2 focus:border-0 focus:ring-blue-500"
                   onBlur={onBlur}
-                  id="content"
+                  name="content"
                   onChange={onChange}
+                  setOptions={{
+                    height: '794px',
+                    width: '100%',
+                    minHeight: '600px',
+                    historyStackDelayTime: 100,
+                    attributesWhitelist: {
+                      all: 'style',
+                    },
+                    buttonList: [
+                      // Default
+                      ['undo', 'redo'],
+                      ['font', 'fontSize', 'formatBlock'],
+                      ['paragraphStyle', 'blockquote'],
+                      [
+                        'bold',
+                        'underline',
+                        'italic',
+                        'strike',
+                        'subscript',
+                        'superscript',
+                      ],
+                      ['fontColor', 'hiliteColor', 'textStyle'],
+                      ['removeFormat'],
+                      ['outdent', 'indent'],
+                      ['align', 'horizontalRule', 'list', 'lineHeight'],
+                      ['table', 'link', 'image', 'video', 'audio'],
+                      ['fullScreen', 'showBlocks', 'codeView'],
+                      ['preview', 'print'],
+                    ], // Or Array of button list, eg. [['font', 'align'], ['image']]
+                    // plugins: [font] set plugins, all plugins are set by default
+                    // Other option
+                    imageFileInput: false,
+                  }}
                 />
               )}
               name="content"

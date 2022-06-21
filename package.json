@@ -12,6 +12,7 @@
     "@lexical/react": "^0.3.5",
     "@next-auth/prisma-adapter": "^1.0.3",
     "@prisma/client": "^3.15.2",
+    "html-react-parser": "^2.0.0",
     "lexical": "^0.3.5",
     "next": "12.1.6",
     "next-auth": "^4.5.0",
@@ -20,8 +21,9 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.32.2",
     "react-hot-toast": "^2.2.0",
-    "react-markdown": "^8.0.3",
-    "react-timeago": "^7.1.0"
+    "react-timeago": "^7.1.0",
+    "suneditor": "^2.43.11",
+    "suneditor-react": "^3.4.0"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",

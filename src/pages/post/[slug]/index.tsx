@@ -4,12 +4,12 @@ import { GetServerSideProps } from 'next'
 import { prisma } from '../../../../lib/prisma'
 import { useEffect } from 'react'
 import Image from 'next/image'
-import ReactMarkdown from 'react-markdown'
 import { PostProps } from '../../../../typings'
 import ReactTimeago from 'react-timeago'
 import Layout from '../../../components/Layout'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
+import parse from 'html-react-parser'
 
 function Post(post: PostProps) {
   const { data: session } = useSession()
@@ -19,14 +19,14 @@ function Post(post: PostProps) {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/publish/${id}`, {
       method: 'PUT',
     })
-    await router.push(`/posts/${post.slug}`)
+    await router.push(`/post/${post.slug}`)
   }
 
   const unPublishPost = async (id: string): Promise<void> => {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/unpublish/${id}`, {
       method: 'PUT',
     })
-    await router.push(`/posts/${post.slug}`)
+    await router.push(`/post/${post.slug}`)
   }
 
   const deletePost = async (id: string): Promise<void> => {
@@ -84,7 +84,7 @@ function Post(post: PostProps) {
                     UnPublish
                   </button>
                 )}
-                <Link href={`/posts/${post.slug}/edit`}>
+                <Link href={`/post/${post.slug}/edit`}>
                   <a className="py-2 px-6 bg-indigo-500 hover:bg-indigo-400 text-white rounded-md">
                     Edit
                   </a>
@@ -98,7 +98,7 @@ function Post(post: PostProps) {
         <h2 className="font-semi-bold underline-offset-2 underline decoration-red-300 text-xl">
           {post.title}
         </h2>
-        <ReactMarkdown>{post.content}</ReactMarkdown>
+        <div>{parse(post.content)}</div>
         <div className="font-semibold justify-between flex items-center">
           <small className="pt-2">By {post.author.name}</small>
           <div className="flex flex-col">

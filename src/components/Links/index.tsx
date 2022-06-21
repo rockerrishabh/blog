@@ -1,9 +1,16 @@
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
 
 function Links() {
+  const { data: session } = useSession()
   return (
     <>
+      {session && (
+        <Link href="/dashboard">
+          <a className="font-semibold text-lg hover:text-blue-500">Dashboard</a>
+        </Link>
+      )}
       <Link href="/category">
         <a className="hover:text-blue-500">Category</a>
       </Link>
